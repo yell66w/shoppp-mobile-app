@@ -37,7 +37,7 @@ const CART_DATA = [
     qty: 3,
   },
 ];
-const CartScreen = () => {
+const CartScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <FlatList
@@ -55,7 +55,10 @@ const CartScreen = () => {
             <BoldText style={styles.text16}>Delivery</BoldText>
             <RegularText>Standard - Free</RegularText>
           </View>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate("Checkout")}
+          >
             <BoldText style={styles.buttonText}>BUY NOW</BoldText>
           </TouchableOpacity>
         </View>

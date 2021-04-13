@@ -4,13 +4,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import colors from "../assets/colors/colors";
 import NavigationDrawerStructure from "../components/NavigationDrawerStructure";
 import CartScreen from "../screens/CartScreen";
-import RegularText from "../components/Text/RegularText";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import CheckoutScreen from "../screens/CheckoutScreen";
 const Stack = createStackNavigator();
 
 const CartScreenStack = ({ navigation }) => {
   return (
-    <Stack.Navigator initialRouteName="About">
+    <Stack.Navigator initialRouteName="Cart">
       <Stack.Screen
         name="Cart"
         component={CartScreen}
@@ -24,6 +24,16 @@ const CartScreenStack = ({ navigation }) => {
               <Ionicons size={30} style={styles.headerRightIcon} name="cart" />
             </View>
           ),
+          headerStyle: styles.headerStyle,
+          headerTintColor: colors.blackPrimary, //Set Header text color
+          headerTitleStyle: styles.headerTitle,
+        }}
+      />
+      <Stack.Screen
+        name="Checkout"
+        component={CheckoutScreen}
+        options={{
+          title: "Checkout", //Set Header Title
           headerStyle: styles.headerStyle,
           headerTintColor: colors.blackPrimary, //Set Header text color
           headerTitleStyle: styles.headerTitle,
