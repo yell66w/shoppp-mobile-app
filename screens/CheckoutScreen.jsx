@@ -84,10 +84,7 @@ const CheckoutScreen = () => {
               <View style={styles.deliveryTextContainer}>
                 <BoldText style={styles.text16}>Total $200</BoldText>
               </View>
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate("Checkout")}
-              >
+              <TouchableOpacity style={styles.button}>
                 <BoldText style={styles.buttonText}>Place Order</BoldText>
               </TouchableOpacity>
             </View>
