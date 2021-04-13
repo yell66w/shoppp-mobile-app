@@ -14,7 +14,7 @@ const NavigationDrawerStructure = (props) => {
     <View style={{ flexDirection: "row" }}>
       <TouchableOpacity onPress={() => toggleDrawer()}>
         {/*Donute Button Image */}
-        <Icon name="menu" size={25} style={{ marginLeft: 15 }} />
+        <Icon name="menu" size={30} style={{ marginLeft: 15 }} />
       </TouchableOpacity>
     </View>
   );

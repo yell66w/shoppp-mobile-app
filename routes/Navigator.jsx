@@ -5,6 +5,7 @@ import { StyleSheet } from "react-native";
 import colors from "../assets/colors/colors";
 import HomeScreenStack from "./HomeScreenStack";
 import AboutScreenStack from "./AboutScreenStack";
+import CategoriesScreenStack from "./CategoriesScreenStacks";
 const Drawer = createDrawerNavigator();
 
 const Navigator = () => {
@@ -23,6 +24,11 @@ const Navigator = () => {
             drawerLabel: "Home",
           }}
           component={HomeScreenStack}
+        />
+        <Drawer.Screen
+          name="Categories"
+          options={{ drawerLabel: "Categories" }}
+          component={CategoriesScreenStack}
         />
         <Drawer.Screen
           name="About"
