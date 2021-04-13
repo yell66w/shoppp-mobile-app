@@ -6,6 +6,7 @@ import colors from "../assets/colors/colors";
 import HomeScreenStack from "./HomeScreenStack";
 import AboutScreenStack from "./AboutScreenStack";
 import CategoriesScreenStack from "./CategoriesScreenStacks";
+import CartScreenStack from "./CartScreenStack";
 const Drawer = createDrawerNavigator();
 
 const Navigator = () => {
@@ -29,6 +30,11 @@ const Navigator = () => {
           name="Categories"
           options={{ drawerLabel: "Categories" }}
           component={CategoriesScreenStack}
+        />
+        <Drawer.Screen
+          name="Cart"
+          options={{ drawerLabel: "Cart" }}
+          component={CartScreenStack}
         />
         <Drawer.Screen
           name="About"
