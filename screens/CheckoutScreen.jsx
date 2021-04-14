@@ -70,27 +70,21 @@ const CheckoutScreen = () => {
         }
         data={CART_DATA}
         renderItem={({ item }) => <CartCard item={item} />}
-        ListFooterComponent={
-          <View style={styles.bottomDetails}>
-            <View style={styles.questionCodeContainer}>
-              <Ionicons
-                style={{ marginRight: 5 }}
-                name="add-circle"
-                size={24}
-              />
-              <BoldText style={styles.text16}>Add Promo Code</BoldText>
-            </View>
-            <View style={styles.deliveryContainer}>
-              <View style={styles.deliveryTextContainer}>
-                <BoldText style={styles.text16}>Total $200</BoldText>
-              </View>
-              <TouchableOpacity style={styles.button}>
-                <BoldText style={styles.buttonText}>Place Order</BoldText>
-              </TouchableOpacity>
-            </View>
-          </View>
-        }
       />
+      <View style={styles.bottomDetails}>
+        <View style={styles.questionCodeContainer}>
+          <Ionicons style={{ marginRight: 5 }} name="add-circle" size={24} />
+          <BoldText style={styles.text16}>Add Promo Code</BoldText>
+        </View>
+        <View style={styles.deliveryContainer}>
+          <View style={styles.deliveryTextContainer}>
+            <BoldText style={styles.text16}>Total $200</BoldText>
+          </View>
+          <TouchableOpacity style={styles.button}>
+            <BoldText style={styles.buttonText}>Place Order</BoldText>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
