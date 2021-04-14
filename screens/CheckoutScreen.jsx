@@ -7,6 +7,7 @@ import BoldText from "../components/Text/BoldText";
 import RegularText from "../components/Text/RegularText";
 import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import ButtonDefault from "../components/ButtonDefault";
 
 const CART_DATA = [
   {
@@ -80,9 +81,7 @@ const CheckoutScreen = () => {
           <View style={styles.deliveryTextContainer}>
             <BoldText style={styles.text16}>Total $200</BoldText>
           </View>
-          <TouchableOpacity style={styles.button}>
-            <BoldText style={styles.buttonText}>Place Order</BoldText>
-          </TouchableOpacity>
+          <ButtonDefault title="PLACE ORDER" />
         </View>
       </View>
     </View>

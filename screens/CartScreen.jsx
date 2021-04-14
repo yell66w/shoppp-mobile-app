@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
 } from "react-native-gesture-handler";
 import colors from "../assets/colors/colors";
+import ButtonDefault from "../components/ButtonDefault";
 import CartCard from "../components/CartCard";
 import BoldText from "../components/Text/BoldText";
 import RegularText from "../components/Text/RegularText";
@@ -55,12 +56,10 @@ const CartScreen = ({ navigation }) => {
             <BoldText style={styles.text16}>Delivery</BoldText>
             <RegularText>Standard - Free</RegularText>
           </View>
-          <TouchableOpacity
-            style={styles.button}
+          <ButtonDefault
+            title="BUY NOW"
             onPress={() => navigation.navigate("Checkout")}
-          >
-            <BoldText style={styles.buttonText}>BUY NOW</BoldText>
-          </TouchableOpacity>
+          />
         </View>
       </View>
     </View>
@@ -93,16 +92,5 @@ const styles = StyleSheet.create({
   deliveryContainer: {
     paddingVertical: 20,
     paddingHorizontal: 20,
-  },
-  button: {
-    borderRadius: 30,
-    backgroundColor: colors.yellowPrimary,
-    paddingVertical: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText: {
-    fontSize: 16,
-    color: "white",
   },
 });

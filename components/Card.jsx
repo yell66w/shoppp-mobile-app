@@ -3,10 +3,10 @@ import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/colors/colors";
 
-const Card = () => {
+const Card = ({ onProductPress }) => {
   return (
     <View style={styles.filterItemContainer}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onProductPress}>
         <ImageBackground
           source={require("../assets/images/suit.jpg")}
           style={styles.filterItem}
