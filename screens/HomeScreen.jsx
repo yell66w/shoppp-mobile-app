@@ -35,7 +35,7 @@ const BEST_SELLING_DATA = [
   { key: "b6", title: "B6" },
 ];
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -98,7 +98,9 @@ const HomeScreen = () => {
               style={styles.itemsContainer}
               data={BEST_SELLING_DATA}
               numColumns={2}
-              renderItem={({ item }) => <Card />}
+              renderItem={({ item }) => (
+                <Card onProductPress={() => navigation.navigate("Product")} />
+              )}
             />
           </>
         }
