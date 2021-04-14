@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   ImageBackground,
   SafeAreaView,
@@ -6,59 +6,102 @@ import {
   Text,
   View,
 } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
 import colors from "../assets/colors/colors";
 import ButtonDefault from "../components/ButtonDefault";
 import BoldText from "../components/Text/BoldText";
 import RegularText from "../components/Text/RegularText";
+import { addToCart } from "../store/actions/cart.action";
 
-const ProductScreen = () => {
+const ProductScreen = ({ route }) => {
+  const { item } = route.params;
+  const [size, setSize] = useState(item.sizes[0]);
+  const [color, setColor] = useState(item.colors[0]);
+  const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
+
+  const onAddToCart = useCallback(() => {
+    dispatch(
+      addToCart(
+        Math.random().toString(),
+        item.name,
+        item.price,
+        item.imageURL,
+        size,
+        color,
+        quantity,
+        item.ref
+      )
+    );
+  }, [dispatch, size, color, quantity]);
+
   return (
     <View style={styles.container}>
       <ScrollView>
         <SafeAreaView>
           <ImageBackground
-            source={require("../assets/images/suit.jpg")}
+            source={{ uri: item.imageURL }}
             style={styles.image}
           ></ImageBackground>
           <View style={styles.bottomDetails}>
-            <BoldText style={{ fontSize: 20 }}>$150</BoldText>
-            <BoldText style={styles.title}>Original White T-Shirt</BoldText>
+            <BoldText style={{ fontSize: 20 }}>${item.price}</BoldText>
+            <BoldText style={styles.title}>{item.name}</BoldText>
             <View style={styles.optionsWrapper}>
-              <View style={styles.colorOption}></View>
-              <View style={styles.colorOption}></View>
-              <View style={styles.colorOption}></View>
-              <View style={styles.colorOption}></View>
-              <View style={styles.colorOption}></View>
+              {item.colors.map((color, index) => {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      ...styles.colorOption,
+                      ...{ backgroundColor: color },
+                    }}
+                  ></View>
+                );
+              })}
             </View>
             <View>
               <BoldText style={styles.sizesTitle}>Sizes</BoldText>
-              <View style={styles.sizesWrapper}>
-                <View style={styles.sizeOption}>
-                  <BoldText style={styles.sizeText}>S</BoldText>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                <View style={styles.sizesWrapper}>
+                  {item.sizes.map((itemSize, index) => {
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => setSize(itemSize)}
+                      >
+                        <View
+                          style={[
+                            styles.sizeOption,
+                            size === itemSize ? styles.selectedSizeOption : {},
+                          ]}
+                        >
+                          <BoldText
+                            style={[
+                              styles.sizeText,
+                              size === itemSize ? styles.selectedSizeText : {},
+                            ]}
+                          >
+                            {itemSize}
+                          </BoldText>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
                 </View>
-                <View style={styles.sizeOption}>
-                  <BoldText style={styles.sizeText}>S</BoldText>
-                </View>
-                <View style={styles.sizeOption}>
-                  <BoldText style={styles.sizeText}>S</BoldText>
-                </View>
-                <View style={styles.sizeOption}>
-                  <BoldText style={styles.sizeText}>S</BoldText>
-                </View>
-              </View>
+              </ScrollView>
             </View>
 
             <View style={styles.detailsWrapper}>
               <BoldText style={styles.detailsOverview}>Overview</BoldText>
               <RegularText style={{ color: "gray" }}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. A
-                facere hic, amet quisquam adipisci ipsam deleniti, earum, modi
-                dolor esse inventore provident alias impedit expedita quasi
-                necessitatibus explicabo harum sed.
+                {item.description}
               </RegularText>
             </View>
-            <ButtonDefault title="ADD TO CART" />
+            <ButtonDefault title="ADD TO CART" onPress={onAddToCart} />
           </View>
         </SafeAreaView>
       </ScrollView>
@@ -113,6 +156,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderColor: colors.blackPrimary,
     borderWidth: 3,
+  },
+  selectedSizeOption: {
+    backgroundColor: colors.blackPrimary,
+    borderWidth: 0,
+  },
+  selectedSizeText: {
+    color: "white",
   },
   sizeText: {
     color: colors.blackPrimary,

@@ -12,11 +12,8 @@ import BoldText from "../components/Text/BoldText";
 import Octicons from "react-native-vector-icons/Octicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import RegularText from "../components/Text/RegularText";
-import { createStackNavigator } from "@react-navigation/stack";
-import AboutScreen from "./AboutScreen";
 import Card from "../components/Card";
-
-const Stack = createStackNavigator();
+import { useSelector } from "react-redux";
 
 const CATEGORIES = [
   { key: "c1", title: "New" },
@@ -26,16 +23,8 @@ const CATEGORIES = [
   { key: "c5", title: "Men" },
 ];
 
-const BEST_SELLING_DATA = [
-  { key: "b1", title: "B1" },
-  { key: "b2", title: "B2" },
-  { key: "b3", title: "B3" },
-  { key: "b4", title: "B4" },
-  { key: "b5", title: "B5" },
-  { key: "b6", title: "B6" },
-];
-
 const HomeScreen = ({ navigation }) => {
+  const products = useSelector((state) => state.products.availableProducts);
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -96,10 +85,16 @@ const HomeScreen = ({ navigation }) => {
             </View>
             <FlatList
               style={styles.itemsContainer}
-              data={BEST_SELLING_DATA}
+              data={products}
               numColumns={2}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <Card onProductPress={() => navigation.navigate("Product")} />
+                <Card
+                  item={item}
+                  onProductPress={() =>
+                    navigation.navigate("Product", { item })
+                  }
+                />
               )}
             />
           </>

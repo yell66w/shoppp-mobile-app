@@ -1,48 +1,19 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
-import {
-  FlatList,
-  TouchableHighlight,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { StyleSheet, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import { useSelector } from "react-redux";
 import colors from "../assets/colors/colors";
 import ButtonDefault from "../components/ButtonDefault";
 import CartCard from "../components/CartCard";
 import BoldText from "../components/Text/BoldText";
 import RegularText from "../components/Text/RegularText";
-import SemiBoldText from "../components/Text/SemiBoldText";
 
-const CART_DATA = [
-  {
-    key: "b1",
-    title: "Adidas Sneakers",
-    ref: "D43867389",
-    price: 150,
-    size: 41,
-    qty: 3,
-  },
-  {
-    key: "b2",
-    title: "T-shirt",
-    ref: "D41823389",
-    price: 200,
-    gender: "M",
-    qty: 3,
-  },
-  {
-    key: "b3",
-    title: "Adidas Sneakers",
-    ref: "D43867389",
-    price: 150,
-    size: 41,
-    qty: 3,
-  },
-];
 const CartScreen = ({ navigation }) => {
+  const cartItems = useSelector((state) => state.cartItems.products);
   return (
     <View style={styles.container}>
       <FlatList
-        data={CART_DATA}
+        data={cartItems}
         renderItem={({ item }) => <CartCard item={item} />}
       />
       <View style={styles.bottomDetails}>

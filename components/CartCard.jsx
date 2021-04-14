@@ -11,7 +11,7 @@ const CartCard = ({ item }) => {
     <View style={styles.itemContainer}>
       <TouchableOpacity>
         <ImageBackground
-          source={require("../assets/images/suit.jpg")}
+          source={{ uri: item.imageURL }}
           style={styles.image}
           borderRadius={10}
         ></ImageBackground>
@@ -19,12 +19,10 @@ const CartCard = ({ item }) => {
 
       <View style={styles.detailsContainer}>
         <View style={styles.topDetails}>
-          <BoldText style={styles.title}>{item.title}</BoldText>
+          <BoldText style={styles.title}>{item.name}</BoldText>
           <BoldText style={styles.ref}>{item.ref}</BoldText>
           <View style={styles.typeSquare}>
-            <BoldText style={styles.typeText}>
-              {item.size || item.gender}
-            </BoldText>
+            <BoldText style={styles.typeText}>{item.size}</BoldText>
           </View>
         </View>
         <View style={styles.bottomDetails}>
@@ -33,7 +31,7 @@ const CartCard = ({ item }) => {
             <View style={styles.quantityCircle}>
               <RegularText>-</RegularText>
             </View>
-            <BoldText style={styles.quantityText}>{item.qty}</BoldText>
+            <BoldText style={styles.quantityText}>{item.quantity}</BoldText>
             <View style={styles.quantityCircle}>
               <RegularText>+</RegularText>
             </View>
