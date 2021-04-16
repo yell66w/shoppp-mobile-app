@@ -18,3 +18,16 @@ export const addToCart = (
   quantity,
   ref,
 });
+
+export const deleteFromCart = (id) => ({
+  type: "DELETE_FROM_CART",
+  id,
+});
+export const addCartItemQuantity = (id) => ({
+  type: "ADD_CART_ITEM_QUANTITY",
+  id,
+});
+export const subtractCartItemQuantity = (id) => ({
+  type: "SUBTRACT_CART_ITEM_QUANTITY",
+  id,
+});

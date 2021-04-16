@@ -12,27 +12,35 @@ const CartScreen = ({ navigation }) => {
   const cartItems = useSelector((state) => state.cartItems.products);
   return (
     <View style={styles.container}>
-      <FlatList
-        data={cartItems}
-        renderItem={({ item }) => <CartCard item={item} />}
-      />
-      <View style={styles.bottomDetails}>
-        <View style={styles.questionCodeContainer}>
-          <BoldText style={styles.text16}>
-            Do you have a promotion code?
-          </BoldText>
+      {cartItems.length > 0 ? (
+        <FlatList
+          ListFooterComponent={
+            <View style={styles.bottomDetails}>
+              <View style={styles.questionCodeContainer}>
+                <BoldText style={styles.text16}>
+                  Do you have a promotion code?
+                </BoldText>
+              </View>
+              <View style={styles.deliveryContainer}>
+                <View style={styles.deliveryTextContainer}>
+                  <BoldText style={styles.text16}>Delivery</BoldText>
+                  <RegularText>Standard - Free</RegularText>
+                </View>
+                <ButtonDefault
+                  title="BUY NOW"
+                  onPress={() => navigation.navigate("Checkout")}
+                />
+              </View>
+            </View>
+          }
+          data={cartItems}
+          renderItem={({ item }) => <CartCard item={item} />}
+        />
+      ) : (
+        <View style={styles.emptyContainer}>
+          <RegularText>No items in cart</RegularText>
         </View>
-        <View style={styles.deliveryContainer}>
-          <View style={styles.deliveryTextContainer}>
-            <BoldText style={styles.text16}>Delivery</BoldText>
-            <RegularText>Standard - Free</RegularText>
-          </View>
-          <ButtonDefault
-            title="BUY NOW"
-            onPress={() => navigation.navigate("Checkout")}
-          />
-        </View>
-      </View>
+      )}
     </View>
   );
 };
@@ -63,5 +71,11 @@ const styles = StyleSheet.create({
   deliveryContainer: {
     paddingVertical: 20,
     paddingHorizontal: 20,
+  },
+  emptyContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    backgroundColor: "white",
   },
 });

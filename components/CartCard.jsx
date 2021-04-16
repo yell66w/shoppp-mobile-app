@@ -1,15 +1,39 @@
 import React from "react";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Alert, ImageBackground, StyleSheet, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch } from "react-redux";
 import colors from "../assets/colors/colors";
+import {
+  addCartItemQuantity,
+  deleteFromCart,
+  subtractCartItemQuantity,
+} from "../store/actions/cart.action";
 import BoldText from "./Text/BoldText";
-import RegularText from "./Text/RegularText";
 import SemiBoldText from "./Text/SemiBoldText";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const CartCard = ({ item }) => {
+  const dispatch = useDispatch();
+
   return (
     <View style={styles.itemContainer}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onLongPress={() =>
+          Alert.alert("DELETE ITEM", "Are you sure you want to delete?", [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel",
+            },
+            {
+              text: "DELETE",
+              onPress: () => {
+                dispatch(deleteFromCart(item.id));
+              },
+            },
+          ])
+        }
+      >
         <ImageBackground
           source={{ uri: item.imageURL }}
           style={styles.image}
@@ -28,13 +52,26 @@ const CartCard = ({ item }) => {
         <View style={styles.bottomDetails}>
           <SemiBoldText style={styles.priceText}>${item.price}</SemiBoldText>
           <View style={styles.quantityContainer}>
-            <View style={styles.quantityCircle}>
-              <RegularText>-</RegularText>
-            </View>
+            <TouchableOpacity
+              onPress={() => dispatch(subtractCartItemQuantity(item.id))}
+            >
+              <Ionicons
+                style={styles.quantityCircle}
+                name="remove-circle-outline"
+                size={30}
+              />
+            </TouchableOpacity>
+
             <BoldText style={styles.quantityText}>{item.quantity}</BoldText>
-            <View style={styles.quantityCircle}>
-              <RegularText>+</RegularText>
-            </View>
+            <TouchableOpacity
+              onPress={() => dispatch(addCartItemQuantity(item.id))}
+            >
+              <Ionicons
+                style={styles.quantityCircle}
+                name="add-circle-outline"
+                size={30}
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -97,13 +134,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   quantityCircle: {
-    width: 25,
-    height: 25,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
     marginHorizontal: 5,
   },
   quantityText: {

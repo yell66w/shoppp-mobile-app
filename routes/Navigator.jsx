@@ -3,10 +3,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import React from "react";
 import { StyleSheet } from "react-native";
 import colors from "../assets/colors/colors";
-import HomeScreenStack from "./HomeScreenStack";
-import AboutScreenStack from "./AboutScreenStack";
-import CategoriesScreenStack from "./CategoriesScreenStacks";
-import CartScreenStack from "./CartScreenStack";
+import { TabScreenStack } from "./TabScreenStack";
 const Drawer = createDrawerNavigator();
 
 const Navigator = () => {
@@ -24,22 +21,7 @@ const Navigator = () => {
           options={{
             drawerLabel: "Home",
           }}
-          component={HomeScreenStack}
-        />
-        <Drawer.Screen
-          name="Categories"
-          options={{ drawerLabel: "Categories" }}
-          component={CategoriesScreenStack}
-        />
-        <Drawer.Screen
-          name="Cart"
-          options={{ drawerLabel: "Cart" }}
-          component={CartScreenStack}
-        />
-        <Drawer.Screen
-          name="About"
-          options={{ drawerLabel: "About" }}
-          component={AboutScreenStack}
+          component={TabScreenStack}
         />
       </Drawer.Navigator>
     </NavigationContainer>
@@ -51,5 +33,14 @@ export default Navigator;
 const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: "Nunito-Bold",
+  },
+  tabBar: {
+    elevation: 0,
+    height: 60,
+    backgroundColor: "black",
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    paddingTop: 10,
+    borderTopWidth: 0,
   },
 });
