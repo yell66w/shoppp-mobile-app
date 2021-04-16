@@ -6,6 +6,8 @@ import NavigationDrawerStructure from "../components/NavigationDrawerStructure";
 import CategoriesScreen from "../screens/CategoriesScreen";
 import RegularText from "../components/Text/RegularText";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import ProductScreen from "../screens/ProductScreen";
+
 const Stack = createStackNavigator();
 
 const CategoriesScreenStack = ({ navigation }) => {
@@ -32,6 +34,13 @@ const CategoriesScreenStack = ({ navigation }) => {
           headerStyle: styles.headerStyle,
           headerTintColor: colors.blackPrimary, //Set Header text color
           headerTitleStyle: styles.headerTitle,
+        }}
+      />
+      <Stack.Screen
+        name="Product"
+        component={ProductScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

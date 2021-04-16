@@ -1,9 +1,12 @@
 import React, { useCallback, useState } from "react";
 import {
+  Alert,
   ImageBackground,
   SafeAreaView,
   StyleSheet,
   Text,
+  ToastAndroid,
+  Touchable,
   View,
 } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
@@ -34,6 +37,7 @@ const ProductScreen = ({ route }) => {
         item.ref
       )
     );
+    ToastAndroid.show("Added to cart", ToastAndroid.SHORT);
   }, [dispatch, size, color, quantity]);
 
   return (
@@ -50,13 +54,14 @@ const ProductScreen = ({ route }) => {
             <View style={styles.optionsWrapper}>
               {item.colors.map((color, index) => {
                 return (
-                  <View
-                    key={index}
-                    style={{
-                      ...styles.colorOption,
-                      ...{ backgroundColor: color },
-                    }}
-                  ></View>
+                  <TouchableOpacity key={index}>
+                    <View
+                      style={{
+                        ...styles.colorOption,
+                        ...{ backgroundColor: color },
+                      }}
+                    ></View>
+                  </TouchableOpacity>
                 );
               })}
             </View>

@@ -6,6 +6,7 @@ import BoldText from "../components/Text/BoldText";
 import RegularText from "../components/Text/RegularText";
 import CategoryCard from "../components/CategoryCard";
 import Entypo from "react-native-vector-icons/Entypo";
+import { useSelector } from "react-redux";
 
 const BEST_SELLING_DATA = [
   { key: "b1", title: "B1" },
@@ -24,7 +25,9 @@ const CATEGORIES = [
   { key: "c5", title: "Accessories" },
 ];
 
-const CategoriesScreen = () => {
+const CategoriesScreen = ({ navigation }) => {
+  const products = useSelector((state) => state.products.availableProducts);
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -48,9 +51,17 @@ const CategoriesScreen = () => {
             </View>
             <FlatList
               style={styles.itemsContainer}
-              data={BEST_SELLING_DATA}
+              data={products}
               numColumns={2}
-              renderItem={({ item }) => <Card />}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <Card
+                  item={item}
+                  onProductPress={() =>
+                    navigation.navigate("Product", { item })
+                  }
+                />
+              )}
             />
           </>
         }

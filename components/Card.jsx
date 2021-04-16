@@ -2,7 +2,8 @@ import React from "react";
 import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/colors/colors";
-import RegularText from "./Text/RegularText";
+import BoldText from "./Text/BoldText";
+import SemiBoldText from "./Text/SemiBoldText";
 
 const Card = ({ onProductPress, item }) => {
   return (
@@ -14,6 +15,12 @@ const Card = ({ onProductPress, item }) => {
           borderRadius={10}
         ></ImageBackground>
       </TouchableOpacity>
+      <View style={styles.detailWrapper}>
+        <BoldText style={{ fontSize: 18 }}>{item.name}</BoldText>
+        <BoldText style={{ color: colors.yellowPrimary }}>
+          ${item.price}
+        </BoldText>
+      </View>
     </View>
   );
 };
@@ -24,10 +31,14 @@ const styles = StyleSheet.create({
   filterItemContainer: {
     flex: 1,
     padding: 5,
+    marginBottom: 15,
   },
   filterItem: {
     backgroundColor: colors.graySecondary,
     height: 250,
     resizeMode: "cover",
+  },
+  detailWrapper: {
+    marginTop: 5,
   },
 });
