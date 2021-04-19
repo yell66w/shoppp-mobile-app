@@ -4,6 +4,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import colors from "../assets/colors/colors";
 import { TabScreenStack } from "./TabScreenStack";
+import { UserShopTabScreenStack } from "./UserShopTabScreenStack";
 const Drawer = createDrawerNavigator();
 
 const Navigator = () => {
@@ -22,6 +23,13 @@ const Navigator = () => {
             drawerLabel: "Home",
           }}
           component={TabScreenStack}
+        />
+        <Drawer.Screen
+          name="MyShop"
+          options={{
+            drawerLabel: "My Shop",
+          }}
+          component={UserShopTabScreenStack}
         />
       </Drawer.Navigator>
     </NavigationContainer>
