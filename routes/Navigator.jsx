@@ -1,37 +1,88 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import React from "react";
-import { StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View } from "react-native";
 import colors from "../assets/colors/colors";
 import { TabScreenStack } from "./TabScreenStack";
 import { UserShopTabScreenStack } from "./UserShopTabScreenStack";
+import { createStackNavigator } from "@react-navigation/stack";
+import AuthScreen from "../screens/auth/AuthScreen";
+import RegularText from "../components/Text/RegularText";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import LoginScreen from "../screens/auth/LoginScreen";
+import RegisterScreen from "../screens/auth/RegisterScreen";
+import { useSelector } from "react-redux";
+import Logout from "../screens/auth/Logout";
 const Drawer = createDrawerNavigator();
-
+const Stack = createStackNavigator();
 const Navigator = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const userId = useSelector((state) => state.auth.userId);
+  useEffect(() => {
+    if (userId) setIsLoggedIn(true);
+    else setIsLoggedIn(false);
+  }, [userId]);
+
   return (
     <NavigationContainer>
-      <Drawer.Navigator
-        drawerContentOptions={{
-          activeTintColor: colors.yellowPrimary,
-          labelStyle: styles.headerTitle,
-          itemStyle: { marginVertical: 5 },
-        }}
-      >
-        <Drawer.Screen
-          name="Home"
-          options={{
-            drawerLabel: "Home",
+      {isLoggedIn ? (
+        <Drawer.Navigator
+          drawerContentOptions={{
+            activeTintColor: colors.yellowPrimary,
+            labelStyle: styles.headerTitle,
+            itemStyle: { marginVertical: 5 },
           }}
-          component={TabScreenStack}
-        />
-        <Drawer.Screen
-          name="MyShop"
-          options={{
-            drawerLabel: "My Shop",
-          }}
-          component={UserShopTabScreenStack}
-        />
-      </Drawer.Navigator>
+        >
+          <Drawer.Screen
+            name="Home"
+            options={{
+              drawerLabel: "Home",
+            }}
+            component={TabScreenStack}
+          />
+          <Drawer.Screen
+            name="MyShop"
+            options={{
+              drawerLabel: "My Shop",
+            }}
+            component={UserShopTabScreenStack}
+          />
+          <Drawer.Screen
+            name="Logout"
+            options={{
+              drawerLabel: "Logout",
+            }}
+            component={Logout}
+          />
+        </Drawer.Navigator>
+      ) : (
+        <Stack.Navigator initialRouteName="Auth">
+          <Stack.Screen
+            name="Auth"
+            options={{
+              title: "",
+              headerShown: false,
+            }}
+            component={AuthScreen}
+          />
+          <Stack.Screen
+            options={{
+              title: "",
+              headerShown: false,
+            }}
+            name="Login"
+            component={LoginScreen}
+          />
+          <Stack.Screen
+            options={{
+              title: "",
+              headerShown: false,
+            }}
+            name="Register"
+            component={RegisterScreen}
+          />
+        </Stack.Navigator>
+      )}
     </NavigationContainer>
   );
 };

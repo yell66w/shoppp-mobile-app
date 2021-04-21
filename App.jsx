@@ -2,15 +2,17 @@ import React from "react";
 import { useFonts } from "expo-font";
 import Navigator from "./routes/Navigator";
 import { Provider } from "react-redux";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { productsReducer } from "./store/reducers/product.reducer";
 import { cartsReducer } from "./store/reducers/cart.reducer";
-
+import thunk from "redux-thunk";
+import authReducer from "./store/reducers/auth.reducer";
 const rootReducer = combineReducers({
   products: productsReducer,
   cartItems: cartsReducer,
+  auth: authReducer,
 });
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default function App() {
   const [loaded] = useFonts({
@@ -22,6 +24,7 @@ export default function App() {
   if (!loaded) {
     return null;
   }
+
   return (
     <Provider store={store}>
       <Navigator />

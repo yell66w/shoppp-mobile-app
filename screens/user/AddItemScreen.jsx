@@ -10,8 +10,19 @@ import ButtonDefault from "../../components/ButtonDefault";
 import * as ImagePicker from "expo-image-picker";
 import RegularText from "../../components/Text/RegularText";
 import BoldText from "../../components/Text/BoldText";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../../store/actions/product.action";
 const AddItemScreen = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const dispatch = useDispatch();
+  const [product, setProduct] = useState({
+    name: null,
+    price: null,
+    quantity: null,
+    colors: ["#EA9F5A", "#6CC178", "#C95EBF", "#5048C8", "#AFC4D6", "#000000"],
+    sizes: ["S", "XS", "L"],
+    description: null,
+    imageURL: null,
+  });
   let openImagePickerAsync = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
@@ -22,7 +33,26 @@ const AddItemScreen = () => {
     if (pickerResult.cancelled === true) {
       return;
     }
-    setSelectedImage({ localUri: pickerResult.uri });
+    setProduct({ ...product, ...{ imageURL: pickerResult.uri } });
+  };
+  const onAddItem = () => {
+    dispatch(addProduct(product));
+    setProduct({
+      name: null,
+      price: null,
+      quantity: null,
+      colors: [
+        "#EA9F5A",
+        "#6CC178",
+        "#C95EBF",
+        "#5048C8",
+        "#AFC4D6",
+        "#000000",
+      ],
+      sizes: ["S", "XS", "L"],
+      description: null,
+      imageURL: null,
+    });
   };
 
   return (
@@ -32,12 +62,14 @@ const AddItemScreen = () => {
           <View style={styles.inputContainer}>
             <TouchableOpacity
               onPress={openImagePickerAsync}
-              onLongPress={() => setSelectedImage(null)}
+              onLongPress={() =>
+                setProduct({ ...product, ...{ imageURL: null } })
+              }
             >
-              {selectedImage !== null ? (
+              {product.imageURL !== null ? (
                 <View style={styles.imageContainer}>
                   <Image
-                    source={{ uri: selectedImage.localUri }}
+                    source={{ uri: product.imageURL }}
                     style={styles.thumbnail}
                   />
                 </View>
@@ -54,19 +86,42 @@ const AddItemScreen = () => {
             <View style={styles.hr}>
               <BoldText style={{ fontSize: 18 }}>Item Details</BoldText>
             </View>
-
-            <TextInput style={styles.input} placeholder="Name Of Item" />
+            <TextInput
+              style={styles.input}
+              placeholder="Name Of Item"
+              value={product.name}
+              onChangeText={(text) =>
+                setProduct({ ...product, ...{ name: text } })
+              }
+            />
             <TextInput
               style={styles.input}
               keyboardType="number-pad"
               placeholder="Price"
+              value={product.price}
+              onChangeText={(text) =>
+                setProduct({ ...product, ...{ price: text } })
+              }
             />
             <TextInput
               style={styles.input}
               keyboardType="numeric"
               placeholder="Quantity"
+              value={product.quantity}
+              onChangeText={(text) =>
+                setProduct({ ...product, ...{ quantity: text } })
+              }
             />
-            <ButtonDefault title="ADD ITEM" />
+            <TextInput
+              style={styles.input}
+              placeholder="Description"
+              value={product.description}
+              multiline={true}
+              onChangeText={(text) =>
+                setProduct({ ...product, ...{ description: text } })
+              }
+            />
+            <ButtonDefault title="ADD ITEM" onPress={onAddItem} />
           </View>
         </SafeAreaView>
       </ScrollView>
