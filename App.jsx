@@ -12,6 +12,9 @@ import { persistReducer, persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import RegularText from "./components/Text/RegularText";
 import { View } from "react-native";
+import { initializeFirebase } from "./database/firebaseDB.js";
+
+initializeFirebase();
 
 const rootReducer = combineReducers({
   products: productsReducer,

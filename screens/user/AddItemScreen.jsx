@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Image,
-  RecyclerViewBackedScrollViewBase,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import {
   ScrollView,
   TextInput,
@@ -18,9 +11,8 @@ import * as ImagePicker from "expo-image-picker";
 import RegularText from "../../components/Text/RegularText";
 import BoldText from "../../components/Text/BoldText";
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct } from "../../store/actions/product.action";
-import firebaseDB from "../../database/firebaseDB";
 import firebase from "firebase";
+import { addProduct } from "../../store/actions/product.action";
 
 const AddItemScreen = () => {
   const userId = useSelector((state) => state.auth.userId);
@@ -35,33 +27,30 @@ const AddItemScreen = () => {
     imageURL: null,
   });
 
-  let openImagePickerAsync = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const openImagePickerAsync = async () => {
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
       alert("Permission to access camera roll is required!");
       return;
     }
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    const pickerResult = await ImagePicker.launchImageLibraryAsync();
     if (pickerResult.cancelled === true) {
       return;
     }
     setProduct({ ...product, ...{ imageURL: pickerResult.uri } });
   };
-  let uploadImage = async (imageUri) => {
-    try {
-      const response = await fetch(imageUri);
-      const blob = await response.blob();
-      const imageName = `IMG_${userId}${Date.now()}.jpg`;
-      // var ref = firebaseDB.storage().ref("images/").child(imageName);
-      var storageRef = firebase.storage().ref("images/").child(imageName);
-      storageRef.put(blob);
-      return await storageRef.getDownloadURL();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
+  async function uploadImageAsync(imageUrl) {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const imageName = `IMG_${Date.now()}${userId}`;
+    const ref = firebase.storage().ref("images").child(imageName);
+    await ref.put(blob);
+    return ref.getDownloadURL();
+  }
+
   const onAddItem = async () => {
-    const imageURL = await uploadImage(product.imageURL);
+    const imageURL = await uploadImageAsync(product.imageURL);
     const newProd = {
       ...product,
       imageURL,
