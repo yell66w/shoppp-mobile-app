@@ -1,4 +1,5 @@
 import * as Facebook from "expo-facebook";
+import firebase from "firebase";
 import { FB } from "../../api/API";
 export const REGISTER = "REGISTER";
 export const LOGIN = "LOGIN";
@@ -15,11 +16,19 @@ export const continueWithFacebook = () => {
       const res = await Facebook.logInWithReadPermissionsAsync();
       if (res.type === "success") {
         const { token } = res;
-        const { data } = await FB.get(
-          `/me?fields=name,first_name,last_name,birthday,email&access_token=${token}`
-        );
-        data["userId"] = data["id"];
-        delete data.id;
+        const credential = firebase.auth.FacebookAuthProvider.credential(token);
+        const {
+          user,
+          additionalUserInfo,
+        } = await firebase.auth().signInWithCredential(credential);
+        const data = {
+          userId: user.uid,
+          name: user.displayName,
+          first_name: additionalUserInfo.profile.first_name,
+          last_name: additionalUserInfo.profile.last_name,
+          birthday: user.birthday || null,
+          email: user.email,
+        };
         dispatch({ type: CONTINUE_WITH_FACEBOOK, payload: data });
       }
     } catch (error) {
