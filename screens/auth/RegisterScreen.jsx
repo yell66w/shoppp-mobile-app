@@ -68,7 +68,7 @@ const RegisterScreen = ({ navigation }) => {
             </SemiBoldText>
           </View>
           <ButtonDefault
-            title="SIGN IN"
+            title="SIGN UP"
             style={{ backgroundColor: colors.blackPrimary }}
             textStyle={{ color: "white" }}
           />
@@ -76,7 +76,7 @@ const RegisterScreen = ({ navigation }) => {
             <BoldText style={{ color: "gray" }}>OR</BoldText>
           </View>
           <ButtonDefault
-            title="SIGN IN WITH FACEBOOK"
+            title="SIGN UP WITH FACEBOOK"
             logo={
               <Ionicons
                 color="white"
