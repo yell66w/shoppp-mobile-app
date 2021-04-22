@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import {
   FlatList,
@@ -13,7 +13,8 @@ import Octicons from "react-native-vector-icons/Octicons";
 import Entypo from "react-native-vector-icons/Entypo";
 import RegularText from "../components/Text/RegularText";
 import Card from "../components/Card";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../store/actions/product.action";
 
 const CATEGORIES = [
   { key: "c1", title: "New" },
@@ -25,6 +26,11 @@ const CATEGORIES = [
 
 const HomeScreen = ({ navigation }) => {
   const products = useSelector((state) => state.products.availableProducts);
+  const first_name = useSelector((state) => state.auth.first_name);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -32,7 +38,7 @@ const HomeScreen = ({ navigation }) => {
           <>
             <View style={styles.searchContainer}>
               <BoldText style={styles.searchHeading}>
-                What item are you looking for?
+                What item are you looking for {first_name}?
               </BoldText>
               <View style={styles.searchBar}>
                 <Octicons

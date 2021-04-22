@@ -1,7 +1,25 @@
-import { PRODUCTS } from "../../data/dummy-data";
+import {
+  ADD_PRODUCT,
+  SET_PRODUCTS,
+  SET_USER_PRODUCTS,
+} from "../actions/product.action";
+
 const INITIAL_STATE = {
-  availableProducts: PRODUCTS,
+  availableProducts: [],
+  userProducts: [],
 };
-export const productsReducer = (state = INITIAL_STATE, action) => {
-  return state;
+export const productsReducer = (state = INITIAL_STATE, { type, payload }) => {
+  switch (type) {
+    case SET_PRODUCTS:
+      return { ...state, availableProducts: payload };
+    case SET_USER_PRODUCTS:
+      return { ...state, userProducts: payload };
+    case ADD_PRODUCT:
+      return {
+        ...state,
+        availableProducts: [...state.availableProducts, payload],
+      };
+    default:
+      return state;
+  }
 };

@@ -4,10 +4,11 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import colors from "../assets/colors/colors";
 import BoldText from "./Text/BoldText";
 
-const ButtonDefault = ({ title, onPress }) => {
+const ButtonDefault = ({ title, onPress, style, textStyle, logo }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <BoldText style={styles.buttonText}>{title}</BoldText>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
+      {logo}
+      <BoldText style={[styles.buttonText, textStyle]}>{title}</BoldText>
     </TouchableOpacity>
   );
 };
@@ -21,6 +22,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row",
   },
   buttonText: {
     fontSize: 16,
