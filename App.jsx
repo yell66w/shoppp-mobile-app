@@ -7,12 +7,26 @@ import { productsReducer } from "./store/reducers/product.reducer";
 import { cartsReducer } from "./store/reducers/cart.reducer";
 import thunk from "redux-thunk";
 import authReducer from "./store/reducers/auth.reducer";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { persistReducer, persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import RegularText from "./components/Text/RegularText";
+import { View } from "react-native";
+
 const rootReducer = combineReducers({
   products: productsReducer,
   cartItems: cartsReducer,
   auth: authReducer,
 });
-const store = createStore(rootReducer, applyMiddleware(thunk));
+
+const persistConfig = {
+  key: "root",
+  storage: AsyncStorage,
+  whitelist: ["auth"],
+};
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+const store = createStore(persistedReducer, applyMiddleware(thunk));
+let persistor = persistStore(store);
 
 export default function App() {
   const [loaded] = useFonts({
@@ -27,7 +41,16 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <Navigator />
+      <PersistGate
+        loading={
+          <View>
+            <RegularText>Loading Persistor</RegularText>
+          </View>
+        }
+        persistor={persistor}
+      >
+        <Navigator />
+      </PersistGate>
     </Provider>
   );
 }

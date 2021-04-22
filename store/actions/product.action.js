@@ -2,7 +2,7 @@ import { API } from "../../api/API";
 
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
-
+export const SET_USER_PRODUCTS = "SET_USER_PRODUCTS";
 export const addProduct = (payload) => {
   return async (dispatch) => {
     try {
@@ -18,7 +18,6 @@ export const addProduct = (payload) => {
 export const fetchProducts = () => {
   return async (dispatch) => {
     try {
-      console.log("fetching...");
       const res = await API.get("products.json");
 
       if (res.data) {
@@ -34,5 +33,13 @@ export const fetchProducts = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+};
+
+export const fetchUserProducts = (payload) => {
+  return async (dispatch) => {
+    try {
+      //HERE FETCH USER PRODUCTS
+    } catch (error) {}
   };
 };

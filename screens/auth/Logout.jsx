@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import RegularText from "../../components/Text/RegularText";
 import { logout } from "../../store/actions/auth.action";
 
-const Logout = () => {
+const Logout = ({}) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(logout());

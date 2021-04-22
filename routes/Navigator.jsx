@@ -16,75 +16,87 @@ import Logout from "../screens/auth/Logout";
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 const Navigator = () => {
+  const [isAppLoading, setisAppLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const userId = useSelector((state) => state.auth.userId);
   useEffect(() => {
-    if (userId) setIsLoggedIn(true);
-    else setIsLoggedIn(false);
+    setisAppLoading(true);
+    if (userId) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+    setisAppLoading(false);
   }, [userId]);
-
-  return (
-    <NavigationContainer>
-      {isLoggedIn ? (
-        <Drawer.Navigator
-          drawerContentOptions={{
-            activeTintColor: colors.yellowPrimary,
-            labelStyle: styles.headerTitle,
-            itemStyle: { marginVertical: 5 },
-          }}
-        >
-          <Drawer.Screen
-            name="Home"
-            options={{
-              drawerLabel: "Home",
+  if (isAppLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <RegularText>Shopp</RegularText>
+      </View>
+    );
+  } else
+    return (
+      <NavigationContainer>
+        {isLoggedIn ? (
+          <Drawer.Navigator
+            drawerContentOptions={{
+              activeTintColor: colors.yellowPrimary,
+              labelStyle: styles.headerTitle,
+              itemStyle: { marginVertical: 5 },
             }}
-            component={TabScreenStack}
-          />
-          <Drawer.Screen
-            name="MyShop"
-            options={{
-              drawerLabel: "My Shop",
-            }}
-            component={UserShopTabScreenStack}
-          />
-          <Drawer.Screen
-            name="Logout"
-            options={{
-              drawerLabel: "Logout",
-            }}
-            component={Logout}
-          />
-        </Drawer.Navigator>
-      ) : (
-        <Stack.Navigator initialRouteName="Auth">
-          <Stack.Screen
-            name="Auth"
-            options={{
-              title: "",
-              headerShown: false,
-            }}
-            component={AuthScreen}
-          />
-          <Stack.Screen
-            options={{
-              title: "",
-              headerShown: false,
-            }}
-            name="Login"
-            component={LoginScreen}
-          />
-          <Stack.Screen
-            options={{
-              title: "",
-              headerShown: false,
-            }}
-            name="Register"
-            component={RegisterScreen}
-          />
-        </Stack.Navigator>
-      )}
-    </NavigationContainer>
-  );
+          >
+            <Drawer.Screen
+              name="Home"
+              options={{
+                drawerLabel: "Home",
+              }}
+              component={TabScreenStack}
+            />
+            <Drawer.Screen
+              name="MyShop"
+              options={{
+                drawerLabel: "My Shop",
+              }}
+              component={UserShopTabScreenStack}
+            />
+            <Drawer.Screen
+              name="Logout"
+              options={{
+                drawerLabel: "Logout",
+              }}
+              component={Logout}
+            />
+          </Drawer.Navigator>
+        ) : (
+          <Stack.Navigator initialRouteName="Auth">
+            <Stack.Screen
+              name="Auth"
+              options={{
+                title: "",
+                headerShown: false,
+              }}
+              component={AuthScreen}
+            />
+            <Stack.Screen
+              options={{
+                title: "",
+                headerShown: false,
+              }}
+              name="Login"
+              component={LoginScreen}
+            />
+            <Stack.Screen
+              options={{
+                title: "",
+                headerShown: false,
+              }}
+              name="Register"
+              component={RegisterScreen}
+            />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    );
 };
 
 export default Navigator;
@@ -101,5 +113,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     paddingTop: 10,
     borderTopWidth: 0,
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

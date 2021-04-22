@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  RecyclerViewBackedScrollViewBase,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import {
   ScrollView,
   TextInput,
@@ -10,9 +17,13 @@ import ButtonDefault from "../../components/ButtonDefault";
 import * as ImagePicker from "expo-image-picker";
 import RegularText from "../../components/Text/RegularText";
 import BoldText from "../../components/Text/BoldText";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../store/actions/product.action";
+import firebaseDB from "../../database/firebaseDB";
+import firebase from "firebase";
+
 const AddItemScreen = () => {
+  const userId = useSelector((state) => state.auth.userId);
   const dispatch = useDispatch();
   const [product, setProduct] = useState({
     name: null,
@@ -23,6 +34,7 @@ const AddItemScreen = () => {
     description: null,
     imageURL: null,
   });
+
   let openImagePickerAsync = async () => {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
@@ -35,8 +47,27 @@ const AddItemScreen = () => {
     }
     setProduct({ ...product, ...{ imageURL: pickerResult.uri } });
   };
-  const onAddItem = () => {
-    dispatch(addProduct(product));
+  let uploadImage = async (imageUri) => {
+    try {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const imageName = `IMG_${userId}${Date.now()}.jpg`;
+      // var ref = firebaseDB.storage().ref("images/").child(imageName);
+      var storageRef = firebase.storage().ref("images/").child(imageName);
+      storageRef.put(blob);
+      return await storageRef.getDownloadURL();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const onAddItem = async () => {
+    const imageURL = await uploadImage(product.imageURL);
+    const newProd = {
+      ...product,
+      imageURL,
+      userId,
+    };
+    dispatch(addProduct(newProd));
     setProduct({
       name: null,
       price: null,

@@ -20,7 +20,6 @@ export const continueWithFacebook = () => {
         );
         data["userId"] = data["id"];
         delete data.id;
-        console.log("dispatching", data);
         dispatch({ type: CONTINUE_WITH_FACEBOOK, payload: data });
       }
     } catch (error) {
