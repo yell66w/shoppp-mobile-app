@@ -23,7 +23,7 @@ import { useFirebase } from "react-redux-firebase";
 require("firebase/firebase-storage");
 require("firebase/database");
 
-const AddItemScreen = () => {
+const AddItemScreen = ({ navigation }) => {
   const fdb = useFirebase();
   const userId = useSelector((state) => state.auth.userId);
   const [addingProduct, setAddingProduct] = useState(false);
@@ -106,6 +106,7 @@ const AddItemScreen = () => {
       imageURL: null,
     });
     setAddingProduct(false);
+    navigation.goBack();
   };
 
   return (

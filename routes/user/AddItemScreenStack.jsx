@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import colors from "../../assets/colors/colors";
 import NavigationDrawerStructure from "../../components/NavigationDrawerStructure";
 import AddItemScreen from "../../screens/user/AddItemScreen";
+import UserShopScreen from "../../screens/user/UserShopScreen";
 
 const Stack = createStackNavigator();
 

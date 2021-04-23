@@ -27,16 +27,13 @@ const CATEGORIES = [
 ];
 
 const HomeScreen = ({ navigation }) => {
-  // const products = useSelector((state) => state.products.availableProducts);
   const first_name = useSelector((state) => state.auth.first_name);
-  useFirebaseConnect([{ path: "products", type: "value" }]);
-  const products = useSelector((state) => state.firebase.ordered.products);
+  const availableProducts = "availableProducts";
+  useFirebaseConnect([{ path: "products", storeAs: availableProducts }]);
+  const products = useSelector(
+    (state) => state.firebase.ordered.availableProducts
+  );
 
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(fetchProducts());
-  // }, [dispatch]);
   if (!isLoaded(products)) {
     return (
       <View>

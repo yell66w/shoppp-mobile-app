@@ -21,7 +21,7 @@ const UserShopScreen = ({ navigation }) => {
     {
       path: "products",
       storeAs: userProducts,
-      queryParams: ["orderByChild=userId", `equalTo=${userId}`],
+      queryParams: [`equalTo=${userId}`, "orderByChild=userId"],
     },
   ]);
   const products = useSelector((state) => state.firebase.ordered.userProducts);
