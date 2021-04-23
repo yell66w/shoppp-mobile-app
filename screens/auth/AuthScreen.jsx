@@ -5,9 +5,11 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import BoldText from "../../components/Text/BoldText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ButtonDefault from "../../components/ButtonDefault";
+import firebase from "firebase";
 import { useDispatch } from "react-redux";
 import {
   continueWithFacebook,
+  logout,
   register,
 } from "../../store/actions/auth.action";
 const AuthScreen = ({ navigation }) => {
@@ -30,7 +32,10 @@ const AuthScreen = ({ navigation }) => {
       </View>
       <View style={styles.bottomContainer}>
         <BoldText style={{ color: "white", fontSize: 30 }}>
-          Ideal store for your shopping
+          Ideal store for your shopping{" "}
+          {firebase.auth().currentUser
+            ? "Still logged in firebase"
+            : "logged out"}
         </BoldText>
         <View style={styles.hr}></View>
         <ButtonDefault

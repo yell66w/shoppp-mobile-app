@@ -12,7 +12,6 @@ export const continueWithFacebook = () => {
         appId: "287510019668480",
         appName: "Shopp",
       });
-      //rebuild standalone if keyhash error
       const res = await Facebook.logInWithReadPermissionsAsync();
       if (res.type === "success") {
         const { token } = res;
@@ -44,6 +43,8 @@ export const logout = () => {
         appId: "287510019668480",
         appName: "Shopp",
       });
+
+      await firebase.auth().signOut();
       await Facebook.logOutAsync();
       dispatch({
         type: LOGOUT,

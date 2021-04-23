@@ -29,7 +29,8 @@ export default Card;
 
 const styles = StyleSheet.create({
   filterItemContainer: {
-    flex: 1,
+    height: "100%",
+    width: "50%",
     padding: 5,
     marginBottom: 15,
   },

@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from "react-native";
 import {
   ScrollView,
   TextInput,
@@ -16,7 +22,9 @@ import { addProduct } from "../../store/actions/product.action";
 
 const AddItemScreen = () => {
   const userId = useSelector((state) => state.auth.userId);
+  const [addingProduct, setAddingProduct] = useState(false);
   const dispatch = useDispatch();
+
   const [product, setProduct] = useState({
     name: null,
     price: null,
@@ -45,12 +53,21 @@ const AddItemScreen = () => {
     const blob = await response.blob();
     const imageName = `IMG_${Date.now()}${userId}`;
     const ref = firebase.storage().ref("images").child(imageName);
-    await ref.put(blob);
+    try {
+      console.log("uploading...");
+      await ref.put(blob);
+      console.log("uploaded");
+    } catch (error) {
+      console.log("cant upload image");
+      console.log(error);
+    }
     return ref.getDownloadURL();
   }
 
   const onAddItem = async () => {
+    setAddingProduct(true);
     const imageURL = await uploadImageAsync(product.imageURL);
+    // const imageURL = "none";
     const newProd = {
       ...product,
       imageURL,
@@ -73,6 +90,7 @@ const AddItemScreen = () => {
       description: null,
       imageURL: null,
     });
+    setAddingProduct(false);
   };
 
   return (
@@ -143,6 +161,11 @@ const AddItemScreen = () => {
             />
             <ButtonDefault title="ADD ITEM" onPress={onAddItem} />
           </View>
+          {addingProduct ? (
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" color={colors.yellowPrimary} />
+            </View>
+          ) : null}
         </SafeAreaView>
       </ScrollView>
     </View>
@@ -152,6 +175,16 @@ const AddItemScreen = () => {
 export default AddItemScreen;
 
 const styles = StyleSheet.create({
+  loading: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFFFF99",
+  },
   container: {
     flex: 1,
     backgroundColor: "white",

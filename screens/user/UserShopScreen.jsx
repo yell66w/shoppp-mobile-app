@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import Card from "../../components/Card";
 import BoldText from "../../components/Text/BoldText";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import RegularText from "../../components/Text/RegularText";
+import { fetchUserProducts } from "../../store/actions/product.action";
 
 const UserShopScreen = ({ navigation }) => {
   const products = useSelector((state) => state.products.userProducts);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserProducts());
+  }, [dispatch]);
 
   if (products.length < 1)
     return (
