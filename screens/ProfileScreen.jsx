@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
-
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const auth = useSelector((state) => state.auth);
   return (
     <View>

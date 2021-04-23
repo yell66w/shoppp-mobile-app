@@ -15,7 +15,6 @@ import RegularText from "../components/Text/RegularText";
 import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../store/actions/product.action";
-
 const CATEGORIES = [
   { key: "c1", title: "New" },
   { key: "c2", title: "Women" },
@@ -38,7 +37,7 @@ const HomeScreen = ({ navigation }) => {
           <>
             <View style={styles.searchContainer}>
               <BoldText style={styles.searchHeading}>
-                What item are you looking for {first_name}?
+                What item are you looking for {first_name} ?
               </BoldText>
               <View style={styles.searchBar}>
                 <Octicons

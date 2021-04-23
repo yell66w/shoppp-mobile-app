@@ -19,6 +19,8 @@ import BoldText from "../../components/Text/BoldText";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "firebase";
 import { addProduct } from "../../store/actions/product.action";
+require("firebase/firebase-storage");
+require("firebase/database");
 
 const AddItemScreen = () => {
   const userId = useSelector((state) => state.auth.userId);
@@ -51,23 +53,35 @@ const AddItemScreen = () => {
   async function uploadImageAsync(imageUrl) {
     const response = await fetch(imageUrl);
     const blob = await response.blob();
-    const imageName = `IMG_${Date.now()}${userId}`;
+    var metadata = {
+      contentType: "image/jpeg",
+    };
+    const imageName = `IMG_${Date.now()}${userId}.jpg`;
     const ref = firebase.storage().ref("images").child(imageName);
-    try {
-      console.log("uploading...");
-      await ref.put(blob);
-      console.log("uploaded");
-    } catch (error) {
-      console.log("cant upload image");
-      console.log(error);
-    }
+    const task = ref.put(blob, metadata);
+    const taskProgress = (snapshot) => {
+      console.log(`transferred: ${snapshot.bytesTransferred}`);
+    };
+
+    const taskCompleted = () => {
+      task.snapshot.ref.getDownloadURL().then((snapshot) => {
+        savePostData(snapshot);
+        console.log(snapshot);
+      });
+    };
+    const taskError = (snapshot) => {
+      console.log(snapshot);
+    };
+    task.on("state_changed", taskProgress, taskError, taskCompleted);
+
     return ref.getDownloadURL();
   }
 
   const onAddItem = async () => {
     setAddingProduct(true);
-    const imageURL = await uploadImageAsync(product.imageURL);
-    // const imageURL = "none";
+    //EDIT - Free Firebase cloud storage upload operations = 20kb/day only
+    // const imageURL = await uploadImageAsync(product.imageURL);
+    const imageURL = product.imageURL;
     const newProd = {
       ...product,
       imageURL,

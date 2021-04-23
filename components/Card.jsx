@@ -5,10 +5,13 @@ import colors from "../assets/colors/colors";
 import BoldText from "./Text/BoldText";
 import SemiBoldText from "./Text/SemiBoldText";
 
-const Card = ({ onProductPress, item }) => {
+const Card = ({ onProductPress, item, onProductLongPress }) => {
   return (
     <View style={styles.filterItemContainer}>
-      <TouchableOpacity onPress={onProductPress}>
+      <TouchableOpacity
+        onPress={onProductPress}
+        onLongPress={onProductLongPress}
+      >
         <ImageBackground
           source={{ uri: item.imageURL }}
           style={styles.filterItem}

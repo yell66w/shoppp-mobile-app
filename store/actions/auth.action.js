@@ -16,6 +16,9 @@ export const continueWithFacebook = () => {
       if (res.type === "success") {
         const { token } = res;
         const credential = firebase.auth.FacebookAuthProvider.credential(token);
+        await firebase
+          .auth()
+          .setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         const {
           user,
           additionalUserInfo,
