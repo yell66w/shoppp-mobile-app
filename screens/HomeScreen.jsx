@@ -15,6 +15,9 @@ import RegularText from "../components/Text/RegularText";
 import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../store/actions/product.action";
+
+import { useFirebaseConnect, isLoaded, isEmpty } from "react-redux-firebase";
+
 const CATEGORIES = [
   { key: "c1", title: "New" },
   { key: "c2", title: "Women" },
@@ -24,12 +27,30 @@ const CATEGORIES = [
 ];
 
 const HomeScreen = ({ navigation }) => {
-  const products = useSelector((state) => state.products.availableProducts);
+  // const products = useSelector((state) => state.products.availableProducts);
   const first_name = useSelector((state) => state.auth.first_name);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, [dispatch]);
+  useFirebaseConnect([{ path: "products", type: "value" }]);
+  const products = useSelector((state) => state.firebase.ordered.products);
+
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(fetchProducts());
+  // }, [dispatch]);
+  if (!isLoaded(products)) {
+    return (
+      <View>
+        <RegularText>Loading...</RegularText>
+      </View>
+    );
+  }
+  if (isEmpty(products)) {
+    return (
+      <View>
+        <RegularText>Product List Is Empty</RegularText>
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -92,12 +113,12 @@ const HomeScreen = ({ navigation }) => {
               style={styles.itemsContainer}
               data={products}
               numColumns={2}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.key}
               renderItem={({ item }) => (
                 <Card
-                  item={item}
+                  item={item.value}
                   onProductPress={() =>
-                    navigation.navigate("Product", { item })
+                    navigation.navigate("Product", { item: item.value })
                   }
                 />
               )}

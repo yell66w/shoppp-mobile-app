@@ -3,6 +3,8 @@ import firebase from "firebase";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 export const SET_USER_PRODUCTS = "SET_USER_PRODUCTS";
+export const DELETE_USER_PRODUCT = "DELETE_USER_PRODUCT";
+
 export const addProduct = (payload) => {
   return async () => {
     try {
@@ -62,6 +64,17 @@ export const fetchUserProducts = () => {
         });
     } catch (error) {
       console.error(error);
+    }
+  };
+};
+export const deleteUserProduct = (id) => {
+  return async (dispatch) => {
+    try {
+      const db = firebase.database().ref("products");
+      db.child(id).remove();
+      dispatch({ type: DELETE_USER_PRODUCT, id });
+    } catch (error) {
+      console.log(error.message);
     }
   };
 };

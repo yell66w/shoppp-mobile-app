@@ -1,25 +1,59 @@
 import React, { useEffect } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Alert, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import Card from "../../components/Card";
 import BoldText from "../../components/Text/BoldText";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import RegularText from "../../components/Text/RegularText";
-import { fetchUserProducts } from "../../store/actions/product.action";
+import {
+  useFirebaseConnect,
+  isLoaded,
+  isEmpty,
+  useFirebase,
+} from "react-redux-firebase";
 
+import firebase from "firebase";
 const UserShopScreen = ({ navigation }) => {
-  const products = useSelector((state) => state.products.userProducts);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchUserProducts());
-  }, [dispatch]);
+  const userId = firebase.auth().currentUser.uid;
+  const userProducts = "userProducts";
+  const fdb = useFirebase();
+  useFirebaseConnect([
+    {
+      path: "products",
+      storeAs: userProducts,
+      queryParams: ["orderByChild=userId", `equalTo=${userId}`],
+    },
+  ]);
+  const products = useSelector((state) => state.firebase.ordered.userProducts);
+  const onProductLongPress = (id) => {
+    Alert.alert("DELETE ITEM", "Are you sure you want to delete?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "DELETE",
+        onPress: () => {
+          fdb.remove(`products/${id}`);
+        },
+      },
+    ]);
+  };
 
-  if (products.length < 1)
+  if (!isLoaded(products)) {
     return (
       <View style={styles.emptyContainer}>
-        <RegularText>Store is currently empty.</RegularText>
+        <RegularText>Loading...</RegularText>
       </View>
     );
+  }
+  if (isEmpty(products)) {
+    return (
+      <View style={styles.emptyContainer}>
+        <RegularText>Product List Is Empty</RegularText>
+      </View>
+    );
+  }
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -32,13 +66,14 @@ const UserShopScreen = ({ navigation }) => {
               style={styles.itemsContainer}
               data={products}
               numColumns={2}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.key}
               renderItem={({ item }) => (
                 <Card
-                  item={item}
+                  item={item.value}
                   onProductPress={() =>
-                    navigation.navigate("Product", { item })
+                    navigation.navigate("Product", { item: item.value })
                   }
+                  onProductLongPress={() => onProductLongPress(item.key)}
                 />
               )}
             />

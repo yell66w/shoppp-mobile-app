@@ -7,6 +7,7 @@ import RegularText from "../components/Text/RegularText";
 import CategoryCard from "../components/CategoryCard";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useSelector } from "react-redux";
+import { useFirebaseConnect, isLoaded, isEmpty } from "react-redux-firebase";
 
 const BEST_SELLING_DATA = [
   { key: "b1", title: "B1" },
@@ -26,8 +27,9 @@ const CATEGORIES = [
 ];
 
 const CategoriesScreen = ({ navigation }) => {
-  const products = useSelector((state) => state.products.availableProducts);
-
+  // const products = useSelector((state) => state.products.availableProducts);
+  useFirebaseConnect([{ path: "products" }]);
+  const products = useSelector((state) => state.firebase.ordered.products);
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -53,12 +55,12 @@ const CategoriesScreen = ({ navigation }) => {
               style={styles.itemsContainer}
               data={products}
               numColumns={2}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item) => item.key}
               renderItem={({ item }) => (
                 <Card
-                  item={item}
+                  item={item.value}
                   onProductPress={() =>
-                    navigation.navigate("Product", { item })
+                    navigation.navigate("Product", { item: item.value })
                   }
                 />
               )}

@@ -1,5 +1,5 @@
 import {
-  ADD_PRODUCT,
+  DELETE_USER_PRODUCT,
   SET_PRODUCTS,
   SET_USER_PRODUCTS,
 } from "../actions/product.action";
@@ -13,6 +13,8 @@ export const productsReducer = (state = INITIAL_STATE, { type, payload }) => {
     case SET_PRODUCTS:
       return { ...state, availableProducts: payload };
     case SET_USER_PRODUCTS:
+      return { ...state, userProducts: payload };
+    case DELETE_USER_PRODUCT:
       return { ...state, userProducts: payload };
     default:
       return state;

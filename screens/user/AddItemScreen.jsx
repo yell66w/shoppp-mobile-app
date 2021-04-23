@@ -19,10 +19,12 @@ import BoldText from "../../components/Text/BoldText";
 import { useDispatch, useSelector } from "react-redux";
 import firebase from "firebase";
 import { addProduct } from "../../store/actions/product.action";
+import { useFirebase } from "react-redux-firebase";
 require("firebase/firebase-storage");
 require("firebase/database");
 
 const AddItemScreen = () => {
+  const fdb = useFirebase();
   const userId = useSelector((state) => state.auth.userId);
   const [addingProduct, setAddingProduct] = useState(false);
   const dispatch = useDispatch();
@@ -62,7 +64,6 @@ const AddItemScreen = () => {
     const taskProgress = (snapshot) => {
       console.log(`transferred: ${snapshot.bytesTransferred}`);
     };
-
     const taskCompleted = () => {
       task.snapshot.ref.getDownloadURL().then((snapshot) => {
         savePostData(snapshot);
@@ -76,7 +77,6 @@ const AddItemScreen = () => {
 
     return ref.getDownloadURL();
   }
-
   const onAddItem = async () => {
     setAddingProduct(true);
     //EDIT - Free Firebase cloud storage upload operations = 20kb/day only
@@ -87,7 +87,8 @@ const AddItemScreen = () => {
       imageURL,
       userId,
     };
-    dispatch(addProduct(newProd));
+    fdb.push("products", newProd);
+    // dispatch(addProduct(newProd));
     setProduct({
       name: null,
       price: null,

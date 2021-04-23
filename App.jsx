@@ -13,13 +13,19 @@ import { PersistGate } from "redux-persist/integration/react";
 import RegularText from "./components/Text/RegularText";
 import { View } from "react-native";
 import { initializeFirebase } from "./database/firebaseDB.js";
+import {
+  firebaseReducer,
+  ReactReduxFirebaseProvider,
+} from "react-redux-firebase";
 
+import firebase from "firebase";
 initializeFirebase();
 
 const rootReducer = combineReducers({
   products: productsReducer,
   cartItems: cartsReducer,
   auth: authReducer,
+  firebase: firebaseReducer,
 });
 
 const persistConfig = {
@@ -27,10 +33,20 @@ const persistConfig = {
   storage: AsyncStorage,
   whitelist: ["auth"],
 };
+
+const rrfConfig = {
+  // productList: "products",
+};
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = createStore(persistedReducer, applyMiddleware(thunk));
 let persistor = persistStore(store);
 
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch,
+  // createFirestoreInstance // <- needed if using firestore
+};
 export default function App() {
   const [loaded] = useFonts({
     Nunito: require("./assets/fonts/Nunito-Regular.ttf"),
@@ -44,16 +60,18 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <PersistGate
-        loading={
-          <View>
-            <RegularText>Loading Persistor</RegularText>
-          </View>
-        }
-        persistor={persistor}
-      >
-        <Navigator />
-      </PersistGate>
+      <ReactReduxFirebaseProvider {...rrfProps}>
+        <PersistGate
+          loading={
+            <View>
+              <RegularText>Loading Persistor</RegularText>
+            </View>
+          }
+          persistor={persistor}
+        >
+          <Navigator />
+        </PersistGate>
+      </ReactReduxFirebaseProvider>
     </Provider>
   );
 }
