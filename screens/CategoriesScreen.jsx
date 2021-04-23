@@ -28,8 +28,11 @@ const CATEGORIES = [
 
 const CategoriesScreen = ({ navigation }) => {
   // const products = useSelector((state) => state.products.availableProducts);
+  const availableProducts = "availableProducts";
   useFirebaseConnect([{ path: "products" }]);
-  const products = useSelector((state) => state.firebase.ordered.products);
+  const products = useSelector(
+    (state) => state.firebase.ordered.availableProducts
+  );
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
